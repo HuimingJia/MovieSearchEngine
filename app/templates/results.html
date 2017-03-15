@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Movie Query System</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../static/css/1-col-portfolio.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="submit" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index">Movie Query System</a>
+            </div>
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+        <!-- Search Bar -->
+        <div class="well">
+            <h4>Movie Search</h4>
+            <form action="/results" method="get">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="query" value="{{text}}">
+                    <input type="hidden" class="form-control" name="page" value="1">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </span>
+                </div>
+            </form>
+        </div>
+
+        <!-- Page Heading -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h3><span class="label label-success">SEARCH RESULTS ：{{total}}</span></h3>
+
+                <h4>
+                <span class="label label-warning">contain:</span>
+                <span class="label label-default">{{termslist}}</span>
+                <span class="label label-warning">ignored:</span>
+                <span class="label label-default">{{stopwords}}</span>
+                </h4>
+            </div>
+        </div>
+        <!-- /.row -->
+        <hr>
+        <!-- Project One -->
+        <form action="showdetail" method="post">
+            {% if pages == 0 %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>Have no results for term "{{strangeterm}}"</h3>
+                    </div>
+                </div>
+            {% else %}
+                {% for item in res %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3> <a href="{{item.posting}}">{{item.title}}</a> </h3>
+                        <h4><span class="label label-default">Similarity : {{ item.similarity }}127</span></h4>
+                        <p class="well well-sm">{{item.abstract}}</p>
+{#                        <a class="btn btn-primary" href="{{item.posting}}">View Details <span class="glyphicon glyphicon-chevron-right"></span></a>#}
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </form>
+        <!-- /.row -->
+
+        <hr>
+        <!-- Pagination -->
+        <div class="row text-center">
+            <div class="col-lg-12">
+                <ul class="pagination">
+                    {% if current == 1 %}
+                    {% else %}
+                    <li>
+                        <a href=results?query={{query}}&page={{current-1}}>&laquo;</a>
+                    </li>
+                    {% endif %}
+
+                    {% for count in range(current - 3, current + 3)%}
+                    {% if count > 0 and count <= pages%}
+                    {% if count == current %}
+                    <li class="active">
+                        <a href=results?query={{query}}&page={{count}}>{{count}}</a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a href=results?query={{query}}&page={{count}}>{{count}}</a>
+                    </li>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if current == pages %}
+                    {% elif pages == 0 %}
+                    {% else %}
+                    <li>
+                        <a href=results?query={{query}}&page={{current + 1}}>&raquo;</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <hr>
+
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Huiming Jia Inforamtion Retrieval 2017</p>
+                </div>
+            </div>
+            <!-- /.row -->
+        </footer>
+
+    </div>
+    <!-- /.container -->
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
